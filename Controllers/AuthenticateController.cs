@@ -24,6 +24,8 @@ namespace JwtAuthenticationTestProject.Controllers
             _configuration = configuration;
         }
 
+        [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
