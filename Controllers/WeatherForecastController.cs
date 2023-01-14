@@ -1,9 +1,10 @@
+using JwtAuthenticationTestProject.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JwtAuthenticationTestProject.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = UserRoles.Admin)]
     [ApiController]
     [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
