@@ -52,6 +52,33 @@ namespace JwtAuthenticationTestProject.Controllers
             return Unauthorized();
         }
 
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            var userExist = await _userManager.FindByNameAsync(model.UserName);
+            if (userExist != null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response { Status = "Error", Message = "User already exists!" });
+            }
+
+            IdentityUser user = new()
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            }
+            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+        }
+
         private JwtSecurityToken GetToken(List<Claim> authClaims)
         {
             throw new NotImplementedException();
